@@ -1,13 +1,16 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import { serverConfig } from "./config";
-import pingRouter from "./routers/ping.router";
+import v1Router from "./routers/v1/index.router";
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded());
 
 /**
  * Registering all the routes and their corresponding routes with out app server object
  */
-app.use(pingRouter);
+app.use("/api/v1", v1Router);
 
 app.listen(serverConfig.PORT, () => {
   console.log(`Server running on port http://localhost:${serverConfig.PORT}`);
