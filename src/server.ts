@@ -1,6 +1,7 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import { serverConfig } from "./config";
 import v1Router from "./routers/v1/index.router";
+import { genericErrorHandler } from "./middlewares/error.middleware";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded());
  * Registering all the routes and their corresponding routes with out app server object
  */
 app.use("/api/v1", v1Router);
+app.use(genericErrorHandler);
 
 app.listen(serverConfig.PORT, () => {
   console.log(`Server running on port http://localhost:${serverConfig.PORT}`);

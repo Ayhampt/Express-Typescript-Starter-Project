@@ -1,14 +1,30 @@
 import { NextFunction, Request, Response } from "express";
-import { AnyZodObject } from "zod/v3";
+import { ZodObject } from "zod";
 
-export const validateRequestBody = (schema: AnyZodObject) => {
+export const validateRequestBody = (schema: ZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await schema._parseAsync(req.body);
+      await schema.parseAsync(req.body);
       console.log("Request Body is valid");
       next();
     } catch (error) {
-      return res.status(400).json({
+      res.status(400).json({
+        message: "Invalid Request Body",
+        success: false,
+        error: error,
+      });
+    }
+  };
+};
+
+export const validateQueryParams = (schema: ZodObject) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await schema.parseAsync(req.query);
+      console.log("Query Params is valid");
+      next();
+    } catch (error) {
+      res.status(400).json({
         message: "Invalid Request Body",
         success: false,
         error: error,
